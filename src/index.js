@@ -12,7 +12,7 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/talker', async (req,res) => {
+app.get('/talker', async (req, res) => {
 try {
   const talkers = await talkerReader()
   return res.status(200).json(talkers);
@@ -20,6 +20,15 @@ try {
   return res.status(200).json([])
 }
 })
+
+app.get('/talker/:id', async (req, res) => {
+  const id = Number(req.params.id);
+    const talkers = await talkerReader()
+    const talker = talkers.find((talker) => talker.id === id);
+    if(!talker) return res.status(404).json({message: "Pessoa palestrante não encontrada"})
+    return res.status(200).json(talker);  
+  })
+  
 
 app.listen(PORT, () => {
   console.log(`----------FULL POWER----------na porta ${PORT}`);
