@@ -9,6 +9,8 @@ const talkerReader = require('../utils/talkerReader');
 const auth = require('../middleware/auth');
 const talkerWriter = require('../utils/talkerWriter');
 const validation11 = require('../middleware/validation11');
+const validationRate = require('../middleware/validationRate');
+const validationWatchedAt = require('../middleware/validationWatchedAt');
 
 const router = express.Router();
 
@@ -21,35 +23,43 @@ router.get('/talker', async (req, res) => {
     }
   });
 
-  router.get('/talker/search', auth, async (req, res) => {
-    const rateParam = Number(req.query.rate);
-    const searchTerm = req.query.q;
+  router.get('/talker/search', auth, validationRate, validationWatchedAt, async (req, res) => {
+    const { rate, q, date } = req.query;
     const talkers = await talkerReader();
-    
     let filteredTalkers = talkers;
-  
-    if (searchTerm) {
-      filteredTalkers = filteredTalkers.filter((t) => t.name.includes(searchTerm));
+    if (q) { 
+       filteredTalkers = talkers.filter((t) => t.name.includes(q));      
     }
-  
-    if (!Number.isInteger(rateParam) || rateParam < 1 || rateParam > 5) {
-      return res.status(400).json({
-        message: 'O campo "rate" deve ser um número inteiro entre 1 e 5',
-      }); 
+    if (rate) {
+      filteredTalkers = filteredTalkers.filter((t) => t.talk.rate === Number(rate));
     }
-      filteredTalkers = filteredTalkers.filter((t) => t.talk.rate === rateParam);
-    if (req.query.hasOwnProperty('rate')) { await talkerWriter(filteredTalkers); }
+    if (date) {
+      filteredTalkers = filteredTalkers.filter((t) => t.talk.watchedAt === date);
+    }
+    
     return res.status(200).json(filteredTalkers);
   });
+
+  // router.get('/talker/search', auth, async (req, res) => {
+  //   const rateParam = Number(req.query.rate);
+  //   const searchTerm = req.query.q;
+  //   const talkers = await talkerReader();
+    
+  //   let filteredTalkers = talkers;
   
-  router.get('/talker/search', auth, async (req, res) => {
-    const searchTerm = req.query.q;
-    const talkers = await talkerReader();
-    if (!searchTerm) return res.status(200).json(talkers);
-    const talker = talkers.filter((t) => t.name.includes(searchTerm));
-    await talkerWriter(talker);
-    return res.status(200).json(talker);
-  });
+  //   if (searchTerm) {
+  //     filteredTalkers = filteredTalkers.filter((t) => t.name.includes(searchTerm));
+  //   }
+  
+  //   if (!Number.isInteger(rateParam) || rateParam < 1 || rateParam > 5) {
+  //     return res.status(400).json({
+  //       message: 'O campo "rate" deve ser um número inteiro entre 1 e 5',
+  //     }); 
+  //   }
+  //     filteredTalkers = filteredTalkers.filter((t) => t.talk.rate === rateParam);
+  //   if (req.query.hasOwnProperty('rate')) { await talkerWriter(filteredTalkers); }
+  //   return res.status(200).json(filteredTalkers);
+  // });
 
   router.patch('/talker/rate/:id', 
   auth,
