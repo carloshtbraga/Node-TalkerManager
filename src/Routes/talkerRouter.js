@@ -63,6 +63,22 @@ router.get('/talker', async (req, res) => {
     }
   });
 
+  router.put('/talker/:id', 
+  auth,
+   validationName,
+    validationAge, validationTalk, validationTalk2, validationTask3, async (req, res) => {
+      const id = Number(req.params.id);
+      const { name, age, talk } = req.body;
+      const talker = await talkerReader();
+      const index = talker.findIndex((d) => d.id === id);
+      if (!talker[index]) {
+ return res.status(404).json({ message: 'Pessoa palestrante não encontrada' }); 
+}
+      talker[index] = { id: Number(id), name, age, talk };
+      await talkerWriter(talker);
+      res.status(200).json(talker[index]);
+  });
+
   router.delete('/talker/:id', auth, async (req, res) => {
     const id = Number(req.params.id);
     const talkers = await talkerReader();
