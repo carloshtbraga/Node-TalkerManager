@@ -8,9 +8,9 @@ const talkerReader = require('../utils/talkerReader');
 
 const auth = require('../middleware/auth');
 const talkerWriter = require('../utils/talkerWriter');
+const validation11 = require('../middleware/validation11');
 
 const router = express.Router();
-router.use(express.json());
 
 router.get('/talker', async (req, res) => {
     try {
@@ -22,12 +22,45 @@ router.get('/talker', async (req, res) => {
   });
 
   router.get('/talker/search', auth, async (req, res) => {
+    const rateParam = Number(req.query.rate);
+    const searchTerm = req.query.q;
+    const talkers = await talkerReader();
+    
+    let filteredTalkers = talkers;
+  
+    if (searchTerm) {
+      filteredTalkers = filteredTalkers.filter((t) => t.name.includes(searchTerm));
+    }
+  
+    if (!Number.isInteger(rateParam) || rateParam < 1 || rateParam > 5) {
+      return res.status(400).json({
+        message: 'O campo "rate" deve ser um número inteiro entre 1 e 5',
+      }); 
+    }
+      filteredTalkers = filteredTalkers.filter((t) => t.talk.rate === rateParam);
+    if (req.query.hasOwnProperty('rate')) { await talkerWriter(filteredTalkers); }
+    return res.status(200).json(filteredTalkers);
+  });
+  
+  router.get('/talker/search', auth, async (req, res) => {
     const searchTerm = req.query.q;
     const talkers = await talkerReader();
     if (!searchTerm) return res.status(200).json(talkers);
     const talker = talkers.filter((t) => t.name.includes(searchTerm));
     await talkerWriter(talker);
     return res.status(200).json(talker);
+  });
+
+  router.patch('/talker/rate/:id', 
+  auth,
+    validation11, async (req, res) => {
+      const talkers = await talkerReader();
+      const id = Number(req.params.id);
+      const rate = Number(req.body.rate);
+      const index = talkers.findIndex((d) => d.id === id);
+      talkers[index].talk.rate = rate;
+      await talkerWriter(talkers);
+      return res.sendStatus(204);
   });
   
   router.get('/talker/:id', async (req, res) => {
@@ -74,7 +107,7 @@ router.get('/talker', async (req, res) => {
       if (!talker[index]) {
  return res.status(404).json({ message: 'Pessoa palestrante não encontrada' }); 
 }
-      talker[index] = { id: Number(id), name, age, talk };
+      talker[index] = { id, name, age, talk };
       await talkerWriter(talker);
       res.status(200).json(talker[index]);
   });
