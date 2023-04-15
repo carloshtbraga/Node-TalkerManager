@@ -1,12 +1,12 @@
 const express = require('express');
-const validationName = require('./validationName');
-const validationAge = require('./validationAge');
-const validationTalk = require('./validationTalk');
-const validationTalk2 = require('./validationTalk2');
-const validationTask3 = require('./validationTask3');
+const validationName = require('../middleware/validationName');
+const validationAge = require('../middleware/validationAge');
+const validationTalk = require('../middleware/validationTalk');
+const validationTalk2 = require('../middleware/validationTalk2');
+const validationTask3 = require('../middleware/validationTask3');
 const talkerReader = require('../utils/talkerReader');
 
-const auth = require('./auth');
+const auth = require('../middleware/auth');
 const talkerWriter = require('../utils/talkerWriter');
 
 const router = express.Router();
@@ -52,6 +52,14 @@ router.get('/talker', async (req, res) => {
     } catch (err) {
  res.status(500).send({ message: err.message });
     }
+  });
+
+  router.delete('/talker/:id', auth, async (req, res) => {
+    const id = Number(req.params.id);
+    const talkers = await talkerReader();
+    const talker = talkers.filter((t) => t.id !== id);
+    await talkerWriter(talker);
+    return res.sendStatus(204);
   });
 
 module.exports = router;
