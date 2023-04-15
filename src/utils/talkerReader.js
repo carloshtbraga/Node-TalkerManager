@@ -6,7 +6,7 @@ const talkersPath = path.resolve(__dirname, '../talker.json');
 const talkerReader = async () => {
   try {
     const data = await fs.readFile(talkersPath);
-    console.log(data);
+    console.log('Consegui ler o arquivo');
     return JSON.parse(data);
   } catch (error) {
     console.error(`Arquivo não pôde ser lido/encontrado: ${error}`);
