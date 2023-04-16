@@ -7,7 +7,7 @@
   <a href="#contato">Contato</a>
 </p>
 <h1 align='center'>
-  <img src='https://ucarecdn.com/0295176b-b17a-4106-b3b0-5bf2b14365e6/' width="350" heigth="350"/>
+  <img src='https://github.com/carloshtbraga/Node-TalkerManager/blob/main/1200px-Node.js_logo.svg.png?raw=true' width="350" heigth="350"/>
 </h1>
 
 
