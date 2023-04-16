@@ -1,4 +1,4 @@
- <h1 align='center'>One For All</h1>
+ <h1 align='center'>API Creation - Talker Manager</h1>
  <p align="center">
   <a href="#sobre-o-projeto">Sobre o Projeto</a> •
   <a href="#tecnologias-utilizadas">Tecnologias Utilizadas</a> • 
@@ -14,10 +14,9 @@
 
 <h1 align='center'>Sobre o projeto</h1>
 
+O Talker Manager é um projeto desenvolvido durante o curso de formação Trybe que tem como objetivo testar conhecimentos em comandos Node e criação de uma api restful robusta e que interage com o workbench.</p>
 
-<p align='center'>OneFOrALl é um projeto desenvolvido durante o curso de formação Trybe que tem como objetivo testar conhecimentos em comandos SQL utilizando o banco de dados que nós mesmos montamos após receber uma planilha desmornalizada.</p>
-
-<p align='center'>Neste projeto foram desenvolvidas queries para inserir, filtrar, buscar, atualizar e apagar informações do banco de dados, além de muuuuuuuuuuuuuuita abstração para criação do DB. O projeto também utilizou ferramentas como Docker e Workbench para gerenciar o banco de dados.</p>
+<p align='center'>Neste projeto foram desenvolvidas rotas para inserir, filtrar, buscar, atualizar e apagar informações do banco de dados, além de muuuuuuuuuuuuuuita abstração para criação dos middlewares. O projeto também utilizou ferramentas como Docker e Workbench para gerenciar o banco de dados.</p>
 <br>
 <h1 align='center'>Tecnologias utilizadas</h1>
 
@@ -25,7 +24,7 @@
                                                 - MySQL
                                                 - Docker
                                                 - MySQL Workbench
-                                                - Excel
+                                                - Node.Js
 
 <h1 align='center'>Como executar o projeto</h1>
 
