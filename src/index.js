@@ -1,5 +1,5 @@
 const express = require('express');
-const chalk = require('chalk');
+
 const talkerRouter = require('./Routes/talkerRouter');
 const loginRouter = require('./Routes/loginRouter');
 
@@ -17,7 +17,5 @@ app.use(talkerRouter);
 app.use(loginRouter);
 
 app.listen(PORT, () => {
-  console.log(chalk.black
-    .bgGreen(chalk.bgWhite('----------'), 'FULL POWER',
-     chalk.bgWhite('----------'), chalk.bgYellow('na porta:'), chalk.bgBlue(`${PORT}`)));
+  console.log(`----------'FULL POWER----------${PORT}`);
 });
