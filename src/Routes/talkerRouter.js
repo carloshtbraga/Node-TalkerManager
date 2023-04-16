@@ -5,12 +5,14 @@ const validationTalk = require('../middleware/validationTalk');
 const validationTalk2 = require('../middleware/validationTalk2');
 const validationTask3 = require('../middleware/validationTask3');
 const talkerReader = require('../utils/talkerReader');
+const workedObj = require('../utils/workedObj');
 
 const auth = require('../middleware/auth');
 const talkerWriter = require('../utils/talkerWriter');
 const validation11 = require('../middleware/validation11');
 const validationRate = require('../middleware/validationRate');
 const validationWatchedAt = require('../middleware/validationWatchedAt');
+const select = require('../db/dbTalker');
 
 const router = express.Router();
 
@@ -40,26 +42,11 @@ router.get('/talker', async (req, res) => {
     return res.status(200).json(filteredTalkers);
   });
 
-  // router.get('/talker/search', auth, async (req, res) => {
-  //   const rateParam = Number(req.query.rate);
-  //   const searchTerm = req.query.q;
-  //   const talkers = await talkerReader();
-    
-  //   let filteredTalkers = talkers;
-  
-  //   if (searchTerm) {
-  //     filteredTalkers = filteredTalkers.filter((t) => t.name.includes(searchTerm));
-  //   }
-  
-  //   if (!Number.isInteger(rateParam) || rateParam < 1 || rateParam > 5) {
-  //     return res.status(400).json({
-  //       message: 'O campo "rate" deve ser um número inteiro entre 1 e 5',
-  //     }); 
-  //   }
-  //     filteredTalkers = filteredTalkers.filter((t) => t.talk.rate === rateParam);
-  //   if (req.query.hasOwnProperty('rate')) { await talkerWriter(filteredTalkers); }
-  //   return res.status(200).json(filteredTalkers);
-  // });
+  router.get('/talker/db', async (req, res) => {
+      const [data] = await select();
+      const organizedData = data.map((dt) => workedObj(dt));
+      res.status(200).json(organizedData);
+  });
 
   router.patch('/talker/rate/:id', 
   auth,
