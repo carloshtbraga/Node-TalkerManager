@@ -25,6 +25,7 @@ O Talker Manager é um projeto desenvolvido durante o curso de formação Trybe 
                                                 - Docker
                                                 - MySQL Workbench
                                                 - Node.Js
+                                                - express
 
 <h1 align='center'>Como executar o projeto</h1>
 
